@@ -1,0 +1,2124 @@
+/* ==========================================
+   JARVIS
+   BIOLOGICAL TRANSPORT SIMULATOR
+   ========================================== */
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    background: #050d14;
+
+    color: #dcecf5;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+}
+
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
+header {
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 28px;
+
+    background: #091722;
+
+    border-bottom:
+        1px solid #183044;
+
+}
+
+
+.logo {
+
+    color: #00e5ff;
+
+    font-size: 25px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.logo span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #7595a5;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.status {
+
+    color: #00e5ff;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ==========================================
+   MAIN
+   ========================================== */
+
+main {
+
+    display: grid;
+
+    grid-template-columns:
+        250px
+        minmax(500px, 1fr)
+        330px;
+
+    gap: 16px;
+
+    padding: 16px;
+
+    min-height:
+        calc(100vh - 115px);
+
+}
+
+
+/* ==========================================
+   PANELS
+   ========================================== */
+
+.control-panel,
+.simulation,
+.info-panel {
+
+    background: #09151f;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 9px;
+
+    padding: 16px;
+
+}
+
+
+/* ==========================================
+   CONTROL PANEL
+   ========================================== */
+
+.control-panel h2 {
+
+    margin-top: 0;
+
+    color: #00e5ff;
+
+    font-size: 18px;
+
+}
+
+
+.description {
+
+    color: #8298a6;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    margin-bottom: 25px;
+
+}
+
+
+.control {
+
+    margin-bottom: 24px;
+
+}
+
+
+.control label {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #a9bdc9;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+}
+
+
+.control label span {
+
+    float: right;
+
+    color: #00e5ff;
+
+    font-weight: bold;
+
+}
+
+
+input[type="range"] {
+
+    width: 100%;
+
+    accent-color: #00e5ff;
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   LIVE PARAMETERS
+   ========================================== */
+
+.parameter-status {
+
+    margin-top: 30px;
+
+    padding: 12px;
+
+    background: #071018;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 7px;
+
+}
+
+
+.parameter-status h3 {
+
+    margin: 0 0 12px;
+
+    color: #00e5ff;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.parameter-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 9px 0;
+
+    font-size: 9px;
+
+}
+
+
+.parameter-row span {
+
+    color: #718896;
+
+}
+
+
+.parameter-row strong {
+
+    color: #bcd2dd;
+
+}
+
+
+/* ==========================================
+   SIMULATION
+   ========================================== */
+
+.simulation {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.simulation-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+}
+
+
+.simulation-header h2 {
+
+    margin: 0;
+
+    color: #d8e8ef;
+
+    font-size: 14px;
+
+}
+
+
+.simulation-header span {
+
+    color: #00e5ff;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* ==========================================
+   TISSUE CONTAINER
+   ========================================== */
+
+#tissueContainer {
+
+    position: relative;
+
+    height: 500px;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            ellipse at center,
+            #102b38 0%,
+            #071018 52%,
+            #040a0f 100%
+        );
+
+    border:
+        1px solid #183044;
+
+    border-radius: 9px;
+
+}
+
+
+/* ==========================================
+   CANVAS
+   ========================================== */
+
+#tissueCanvas {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+}
+
+
+/* ==========================================
+   VISUAL TITLE
+   ========================================== */
+
+.visual-title {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 18px;
+
+    z-index: 10;
+
+    color: #00e5ff;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+.visual-title span {
+
+    color: #688794;
+
+}
+
+
+/* ==========================================
+   VISUAL BADGES
+   ========================================== */
+
+.visual-overlay {
+
+    position: absolute;
+
+    right: 18px;
+
+    top: 15px;
+
+    z-index: 10;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.visual-badge {
+
+    padding: 6px 8px;
+
+    background:
+        rgba(5, 14, 20, 0.85);
+
+    border:
+        1px solid #244453;
+
+    border-radius: 5px;
+
+    color: #78919d;
+
+    font-size: 8px;
+
+}
+
+
+.visual-badge strong {
+
+    margin-left: 5px;
+
+    color: #00e5ff;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 11px;
+
+}
+
+
+/* ==========================================
+   LEGEND
+   ========================================== */
+
+.tissue-legend {
+
+    position: absolute;
+
+    left: 18px;
+
+    right: 18px;
+
+    bottom: 13px;
+
+    z-index: 10;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+
+    color: #738a96;
+
+    font-size: 8px;
+
+}
+
+
+.tissue-legend div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+}
+
+
+.legend-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+}
+
+
+.legend-dot.warm {
+
+    background: #ff6540;
+
+}
+
+
+.legend-dot.normal {
+
+    background: #547d89;
+
+}
+
+
+.legend-dot.vessel-dot {
+
+    background: #d93650;
+
+}
+
+
+.legend-arrow {
+
+    color: #00e5ff;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   TEMPERATURE DISPLAY
+   ========================================== */
+
+.temperature-display {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 12px;
+
+    margin-top: 12px;
+
+}
+
+
+.temperature-display > div {
+
+    padding: 12px;
+
+    background: #071018;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 7px;
+
+}
+
+
+.temperature-display small {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #738996;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.temperature-display strong {
+
+    color: #00e5ff;
+
+    font-size: 19px;
+
+}
+
+
+/* ==========================================
+   EQUATION CARDS
+   ========================================== */
+
+.equation-card {
+
+    padding: 12px;
+
+    margin-bottom: 12px;
+
+    background: #09151f;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 8px;
+
+}
+
+
+.equation-card h2 {
+
+    margin: 0 0 10px;
+
+    color: #dbeaf0;
+
+    font-size: 12px;
+
+}
+
+
+.equation {
+
+    padding: 10px;
+
+    margin-top: 7px;
+
+    background: #071018;
+
+    border-radius: 6px;
+
+    text-align: center;
+
+    color: #00e5ff;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+}
+
+
+/* ==========================================
+   GRAPH
+   ========================================== */
+
+#temperatureGraph {
+
+    width: 100%;
+
+    height: 220px;
+
+    display: block;
+
+    margin-top: 12px;
+
+    background: #071018;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 7px;
+
+}
+
+
+/* ==========================================
+   CALCULATION
+   ========================================== */
+
+.calculation {
+
+    padding: 10px;
+
+    background: #071018;
+
+    border-radius: 6px;
+
+    text-align: center;
+
+    color: #91a7b3;
+
+    font-size: 11px;
+
+}
+
+
+.formula-small {
+
+    margin: 7px 0;
+
+    color: #00e5ff;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+}
+
+
+.calculation-result {
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   DERIVATION
+   ========================================== */
+
+.derivation-card {
+
+    margin-top: 14px;
+
+}
+
+
+.derivation-card details {
+
+    margin-top: 5px;
+
+}
+
+
+.derivation-card summary {
+
+    cursor: pointer;
+
+    padding: 10px 12px;
+
+    background: #071018;
+
+    border:
+        1px solid #183044;
+
+    border-radius: 6px;
+
+    color: #00e5ff;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    list-style: none;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s;
+
+}
+
+
+.derivation-card summary::-webkit-details-marker {
+
+    display: none;
+
+}
+
+
+.derivation-card summary:hover {
+
+    background: #0b1a24;
+
+    border-color: #00e5ff;
+
+}
+
+
+.derivation-card details[open] summary {
+
+    margin-bottom: 10px;
+
+}
+
+
+.derivation-step {
+
+    margin-top: 10px;
+
+    padding: 11px;
+
+    background:
+        rgba(5, 15, 22, 0.8);
+
+    border-left:
+        2px solid #183044;
+
+    border-radius: 5px;
+
+}
+
+
+.derivation-step span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #00d9ff;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+.derivation-step strong {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #dcecf3;
+
+    font-size: 11px;
+
+}
+
+
+.derivation-equation {
+
+    padding: 8px;
+
+    margin-top: 6px;
+
+    background: #050d13;
+
+    border-radius: 5px;
+
+    color: #00e5ff;
+
+    font-family:
+        "Times New Roman",
+        Georgia,
+        serif;
+
+    font-size: 15px;
+
+    text-align: center;
+
+}
+
+
+.derivation-step p {
+
+    margin: 7px 0 0;
+
+    color: #8fa7b4;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+.final-step {
+
+    border-left-color: #00e5ff;
+
+}
+
+
+.final-equation {
+
+    font-size: 16px;
+
+    box-shadow:
+        0 0 12px rgba(
+            0,
+            229,
+            255,
+            0.08
+        );
+
+}
+
+
+/* ==========================================
+   JARVIS
+   ========================================== */
+
+.jarvis-card {
+
+    padding: 14px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0a1c27,
+            #08141c
+        );
+
+    border:
+        1px solid #00a9c0;
+
+    border-radius: 8px;
+
+}
+
+
+.jarvis-card h2 {
+
+    margin: 0 0 8px;
+
+    color: #00e5ff;
+
+    font-size: 13px;
+
+}
+
+
+.jarvis-card p {
+
+    margin: 0;
+
+    color: #a6bbc5;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+footer {
+
+    height: 45px;
+
+    padding: 0 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #08141d;
+
+    border-top:
+        1px solid #183044;
+
+    color: #607985;
+
+    font-size: 9px;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 1100px) {
+
+    main {
+
+        grid-template-columns:
+            220px
+            minmax(400px, 1fr);
+
+    }
+
+
+    .info-panel {
+
+        grid-column: 1 / -1;
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    main {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .info-panel {
+
+        grid-column: auto;
+
+    }
+
+}
+/* =========================================
+   LIVE VISUAL RESPONSE
+   ========================================= */
+
+.visual-response {
+    position: absolute;
+    left: 20px;
+    bottom: 38px;
+    width: 190px;
+    padding: 12px 14px;
+    border: 1px solid #245267;
+    border-radius: 8px;
+    background: rgba(5, 18, 27, 0.92);
+    z-index: 5;
+}
+
+.visual-response h3 {
+    margin: 0 0 8px 0;
+    font-size: 11px;
+    color: #00e5ff;
+    letter-spacing: 1px;
+}
+
+.visual-response p {
+    margin: 5px 0;
+    font-size: 10px;
+    color: #9ab3bf;
+}
+/* =========================================================
+   JARVIS 3D LAB — LARGE VIEW + PARAMETER SIDE PANEL
+   ========================================================= */
+
+#jarvis3DModule {
+    width: 100% !important;
+    max-width: 1500px !important;
+    margin: 35px auto !important;
+    padding: 24px !important;
+
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 310px !important;
+    gap: 20px !important;
+
+    box-sizing: border-box;
+}
+
+/* Make the 3D canvas large */
+#jarvis3DCanvas {
+    width: 100% !important;
+    height: 680px !important;
+    min-height: 600px !important;
+
+    display: block !important;
+
+    border-radius: 18px;
+    cursor: grab;
+}
+
+#jarvis3DCanvas:active {
+    cursor: grabbing;
+}
+
+/* 3D parameter panel */
+#jarvis3DParamRail {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 20px;
+
+    border: 1px solid rgba(0, 220, 255, 0.25);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(4, 22, 32, 0.98),
+            rgba(2, 12, 20, 0.98)
+        );
+
+    box-shadow:
+        0 0 30px rgba(0, 220, 255, 0.08);
+
+    align-self: stretch;
+}
+
+/* Parameter heading */
+#jarvis3DParamRail h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+
+    color: #00eaff;
+    font-size: 18px;
+}
+
+/* Individual parameter */
+.jarvis3d-param {
+    margin-bottom: 22px;
+}
+
+.jarvis3d-param label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+
+    color: #b8d0d8;
+    font-size: 13px;
+}
+
+.jarvis3d-param strong {
+    color: #00eaff;
+    font-size: 13px;
+}
+
+/* Sliders */
+.jarvis3d-param input[type="range"] {
+    width: 100%;
+}
+
+/* Live equation/info boxes */
+.jarvis3d-info {
+    margin-top: 18px;
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: rgba(0, 234, 255, 0.05);
+    border: 1px solid rgba(0, 234, 255, 0.15);
+
+    color: #9fb8c2;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.jarvis3d-info strong {
+    color: #00eaff;
+}
+
+/* Status */
+#jarvis3DStatus {
+    grid-column: 1 / -1;
+}
+
+/* Smaller screens */
+@media (max-width: 950px) {
+
+    #jarvis3DModule {
+        grid-template-columns: 1fr !important;
+    }
+
+    #jarvis3DCanvas {
+        height: 550px !important;
+        min-height: 500px !important;
+    }
+
+    #jarvis3DParamRail {
+        grid-column: 1 !important;
+    }
+}
+/* =========================================================
+   JARVIS — BIOTECH AURORA THEME
+   New visual identity
+   ========================================================= */
+
+:root {
+    --jarvis-bg: #080611;
+    --jarvis-panel: #110d1c;
+    --jarvis-panel-2: #171024;
+
+    --jarvis-purple: #a855f7;
+    --jarvis-magenta: #ec4899;
+    --jarvis-pink: #f472b6;
+
+    --jarvis-green: #34d399;
+    --jarvis-orange: #fb923c;
+
+    --jarvis-text: #f3e8ff;
+    --jarvis-muted: #b8a9c9;
+
+    --jarvis-border: rgba(168, 85, 247, 0.28);
+}
+
+
+/* =========================================================
+   MAIN BACKGROUND
+   ========================================================= */
+
+body {
+    background:
+        radial-gradient(
+            circle at 20% 10%,
+            rgba(168, 85, 247, 0.13),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(236, 72, 153, 0.10),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #080611 0%,
+            #0b0713 45%,
+            #05040a 100%
+        );
+
+    color: var(--jarvis-text);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(17, 13, 28, 0.98),
+            rgba(24, 12, 31, 0.98)
+        ) !important;
+
+    border-bottom:
+        1px solid
+        rgba(168, 85, 247, 0.25) !important;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+.logo {
+    color: #ffffff !important;
+
+    text-shadow:
+        0 0 18px
+        rgba(168, 85, 247, 0.7);
+}
+
+
+.logo span {
+    color: var(--jarvis-pink) !important;
+}
+
+
+.status {
+    color: var(--jarvis-green) !important;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.control-panel,
+.simulation,
+.equation-card,
+.parameter-status {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 13, 28, 0.96),
+            rgba(10, 7, 17, 0.96)
+        ) !important;
+
+    border:
+        1px solid
+        var(--jarvis-border) !important;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.35),
+        inset 0 0 35px
+        rgba(168, 85, 247, 0.025);
+}
+
+
+/* =========================================================
+   HEADINGS
+   ========================================================= */
+
+h1,
+h2,
+h3 {
+    color: var(--jarvis-text);
+}
+
+
+.control-panel h2,
+.simulation-header h2 {
+    color: #ffffff !important;
+
+    text-shadow:
+        0 0 15px
+        rgba(168, 85, 247, 0.45);
+}
+
+
+.description {
+    color: var(--jarvis-muted) !important;
+}
+
+
+/* =========================================================
+   SLIDERS
+   ========================================================= */
+
+input[type="range"] {
+    accent-color: var(--jarvis-purple);
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+    background:
+        linear-gradient(
+            135deg,
+            var(--jarvis-purple),
+            var(--jarvis-pink)
+        ) !important;
+
+    box-shadow:
+        0 0 12px
+        rgba(236, 72, 153, 0.65);
+}
+
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(168, 85, 247, 0.35),
+            rgba(236, 72, 153, 0.20)
+        ) !important;
+}
+
+
+/* =========================================================
+   VALUE TEXT
+   ========================================================= */
+
+.control label span,
+.control label strong {
+    color: var(--jarvis-pink) !important;
+}
+
+
+/* =========================================================
+   LIVE PARAMETERS
+   ========================================================= */
+
+.parameter-status h3 {
+    color: var(--jarvis-green) !important;
+
+    text-shadow:
+        0 0 12px
+        rgba(52, 211, 153, 0.35);
+}
+
+
+.parameter-row {
+    border-bottom:
+        1px solid
+        rgba(168, 85, 247, 0.12) !important;
+}
+
+
+.parameter-row span {
+    color: var(--jarvis-muted) !important;
+}
+
+
+.parameter-row strong {
+    color: var(--jarvis-green) !important;
+}
+
+
+/* =========================================================
+   3D BIOLOGICAL LAB
+   ========================================================= */
+
+#jarvis3DModule {
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(168, 85, 247, 0.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15, 9, 24, 0.98),
+            rgba(7, 5, 12, 0.98)
+        ) !important;
+
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.35) !important;
+
+    border-radius: 24px !important;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.50),
+        0 0 45px
+        rgba(168, 85, 247, 0.07);
+}
+
+
+/* =========================================================
+   3D CANVAS FRAME
+   ========================================================= */
+
+#jarvis3DCanvas {
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.30) !important;
+
+    border-radius: 20px !important;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(40, 20, 55, 0.35),
+            rgba(3, 2, 7, 0.95)
+        );
+
+    box-shadow:
+        inset 0 0 60px
+        rgba(168, 85, 247, 0.06),
+
+        0 0 30px
+        rgba(168, 85, 247, 0.08);
+}
+
+
+/* =========================================================
+   3D PARAMETER PANEL
+   ========================================================= */
+
+#jarvis3DParamRail {
+    background:
+        linear-gradient(
+            160deg,
+            rgba(25, 14, 38, 0.98),
+            rgba(10, 7, 17, 0.98)
+        ) !important;
+
+    border:
+        1px solid
+        rgba(236, 72, 153, 0.25) !important;
+
+    box-shadow:
+        inset 0 0 35px
+        rgba(236, 72, 153, 0.035),
+
+        0 15px 45px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+#jarvis3DParamRail h3 {
+    color: var(--jarvis-pink) !important;
+
+    text-shadow:
+        0 0 15px
+        rgba(236, 72, 153, 0.45);
+}
+
+
+/* =========================================================
+   3D PARAMETER VALUES
+   ========================================================= */
+
+.jarvis3d-param label {
+    color: var(--jarvis-muted) !important;
+}
+
+
+.jarvis3d-param strong {
+    color: var(--jarvis-green) !important;
+}
+
+
+/* =========================================================
+   3D INFO BOXES
+   ========================================================= */
+
+.jarvis3d-info {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(168, 85, 247, 0.08),
+            rgba(236, 72, 153, 0.035)
+        ) !important;
+
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.20) !important;
+
+    color: var(--jarvis-muted) !important;
+}
+
+
+.jarvis3d-info strong {
+    color: var(--jarvis-pink) !important;
+}
+
+
+/* =========================================================
+   THERMAL SECTION
+   ========================================================= */
+
+#tissueContainer {
+    border:
+        1px solid
+        rgba(251, 146, 60, 0.20) !important;
+
+    box-shadow:
+        0 0 35px
+        rgba(251, 146, 60, 0.05);
+}
+
+
+.visual-title {
+    color: var(--jarvis-pink) !important;
+}
+
+
+.visual-title span {
+    color: var(--jarvis-orange) !important;
+}
+
+
+.visual-badge {
+    background:
+        rgba(17, 10, 25, 0.90) !important;
+
+    border:
+        1px solid
+        rgba(251, 146, 60, 0.30) !important;
+}
+
+
+.visual-badge strong {
+    color: var(--jarvis-orange) !important;
+}
+
+
+/* =========================================================
+   TEMPERATURE RESULTS
+   ========================================================= */
+
+#maxTemperature,
+#temperatureRise,
+#calcResult {
+    color: var(--jarvis-orange) !important;
+
+    text-shadow:
+        0 0 12px
+        rgba(251, 146, 60, 0.35);
+}
+
+
+/* =========================================================
+   JARVIS AI MESSAGE
+   ========================================================= */
+
+#jarvisMessage,
+#chargeJarvisMessage,
+#constitutiveJarvis {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(168, 85, 247, 0.08),
+            rgba(52, 211, 153, 0.04)
+        ) !important;
+
+    border-left:
+        3px solid
+        var(--jarvis-pink) !important;
+
+    color: #eadcf7 !important;
+}
+
+
+/* =========================================================
+   CHARGE FLUX
+   ========================================================= */
+
+#chargeFluxCanvas {
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.25) !important;
+
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 0 30px
+        rgba(168, 85, 247, 0.06);
+}
+
+
+/* =========================================================
+   EQUATIONS
+   ========================================================= */
+
+.equation,
+.derivation-equation {
+    color: var(--jarvis-pink) !important;
+
+    text-shadow:
+        0 0 10px
+        rgba(236, 72, 153, 0.25);
+}
+
+
+.derivation-step {
+    border-left:
+        2px solid
+        rgba(168, 85, 247, 0.45) !important;
+}
+
+
+.derivation-step > span {
+    color: var(--jarvis-green) !important;
+}
+
+
+/* =========================================================
+   ACTIVE / STATUS ELEMENTS
+   ========================================================= */
+
+.simulation-header span {
+    color: var(--jarvis-green) !important;
+
+    text-shadow:
+        0 0 10px
+        rgba(52, 211, 153, 0.40);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080611;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        linear-gradient(
+            180deg,
+            var(--jarvis-purple),
+            var(--jarvis-pink)
+        );
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        linear-gradient(
+            180deg,
+            var(--jarvis-pink),
+            var(--jarvis-purple)
+        );
+}
+
+
+/* =========================================================
+   3D STATUS
+   ========================================================= */
+
+#jarvis3DStatus {
+    color: var(--jarvis-green) !important;
+
+    text-shadow:
+        0 0 10px
+        rgba(52, 211, 153, 0.35);
+}
+/* =========================================================
+   JARVIS — HOLOGRAPHIC DARK LAB BACKGROUND
+   ========================================================= */
+
+html,
+body {
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(91, 33, 182, 0.22),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 10% 80%,
+            rgba(14, 116, 144, 0.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 70%,
+            rgba(236, 72, 153, 0.10),
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #030712 0%,
+            #08051a 45%,
+            #020617 100%
+        ) !important;
+
+    min-height: 100%;
+}
+
+
+/* Main application background */
+
+main {
+    background: transparent !important;
+}
+
+
+/* =========================================================
+   HOLOGRAPHIC GRID EFFECT
+   ========================================================= */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    background-image:
+        linear-gradient(
+            rgba(139, 92, 246, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(34, 211, 238, 0.035) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        45px 45px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 20%,
+            transparent 85%
+        );
+
+}
+
+
+/* =========================================================
+   SOFT AMBIENT GLOW
+   ========================================================= */
+
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    width: 650px;
+
+    height: 650px;
+
+    left: 50%;
+
+    top: 45%;
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124, 58, 237, 0.08),
+            transparent 68%
+        );
+
+    filter: blur(30px);
+
+}
+
+
+/* =========================================================
+   3D LAB BACKGROUND
+   ========================================================= */
+
+#jarvis3DModule {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 7, 25, 0.96),
+            rgba(3, 7, 18, 0.96)
+        ) !important;
+
+    border:
+        1px solid
+        rgba(139, 92, 246, 0.30) !important;
+
+    box-shadow:
+        0 0 40px
+        rgba(124, 58, 237, 0.12),
+        inset 0 0 35px
+        rgba(34, 211, 238, 0.025) !important;
+
+}
+
+
+/* =========================================================
+   3D VIEWPORT
+   ========================================================= */
+
+#jarvis3DCanvas {
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(30, 27, 75, 0.55),
+            rgba(2, 6, 23, 0.98) 72%
+        ) !important;
+
+}
+
+
+/* =========================================================
+   PARAMETER PANEL
+   ========================================================= */
+
+#jarvis3DParamRail {
+
+    background:
+        linear-gradient(
+            160deg,
+            rgba(18, 10, 35, 0.96),
+            rgba(5, 8, 22, 0.98)
+        ) !important;
+
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.32) !important;
+
+    box-shadow:
+        0 0 25px
+        rgba(168, 85, 247, 0.10),
+        inset 0 0 20px
+        rgba(34, 211, 238, 0.025) !important;
+
+}
+
+
+/* =========================================================
+   HAND CONTROL PANEL
+   ========================================================= */
+
+#jarvisHandGesturePanel {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 8, 35, 0.96),
+            rgba(4, 7, 20, 0.98)
+        ) !important;
+
+    border-color:
+        rgba(236, 72, 153, 0.35) !important;
+
+    box-shadow:
+        0 0 30px
+        rgba(236, 72, 153, 0.08) !important;
+
+}
+
+/* =========================================================
+   JARVIS — TONY STARK CINEMATIC BACKGROUND V2
+   Final override layer
+   ========================================================= */
+
+:root {
+    --ts-black: #010308;
+    --ts-navy: #030914;
+    --ts-blue: #00bfff;
+    --ts-cyan: #20e7ff;
+}
+
+/* Deep cinematic black/navy base */
+html,
+body {
+    background:
+        radial-gradient(
+            ellipse at 50% 42%,
+            rgba(0, 105, 170, 0.13) 0%,
+            rgba(0, 42, 78, 0.08) 24%,
+            transparent 52%
+        ),
+        radial-gradient(
+            ellipse at 8% 92%,
+            rgba(0, 110, 160, 0.08) 0%,
+            transparent 35%
+        ),
+        radial-gradient(
+            ellipse at 92% 8%,
+            rgba(30, 70, 150, 0.07) 0%,
+            transparent 32%
+        ),
+        linear-gradient(
+            180deg,
+            #010308 0%,
+            #020712 48%,
+            #01040a 100%
+        ) !important;
+
+    background-attachment: fixed;
+}
+
+/* Remove the old broad purple ambient wash */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    left: auto;
+    top: auto;
+    transform: none;
+    border-radius: 0;
+    pointer-events: none;
+    z-index: -2;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(0, 190, 255, 0.055) 0%,
+            transparent 38%
+        ),
+        radial-gradient(
+            ellipse at 15% 45%,
+            rgba(0, 90, 150, 0.045) 0%,
+            transparent 30%
+        ),
+        radial-gradient(
+            ellipse at 85% 55%,
+            rgba(50, 70, 160, 0.04) 0%,
+            transparent 30%
+        );
+
+    filter: blur(24px);
+}
+
+/* Fine Stark-style technical grid */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 190, 255, 0.028) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 190, 255, 0.028) 1px,
+            transparent 1px
+        );
+
+    background-size: 42px 42px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0.95) 0%,
+            rgba(0,0,0,0.55) 48%,
+            transparent 88%
+        );
+
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0.95) 0%,
+            rgba(0,0,0,0.55) 48%,
+            transparent 88%
+        );
+
+    animation: starkGridDrift 28s linear infinite;
+}
+
+/* Subtle horizon / reactor glow */
+main::before {
+    content: "";
+    position: fixed;
+    left: 50%;
+    top: 48%;
+    width: 70vw;
+    height: 1px;
+    transform: translateX(-50%);
+
+    pointer-events: none;
+    z-index: -1;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 200, 255, 0.16),
+        rgba(0, 225, 255, 0.28),
+        rgba(0, 200, 255, 0.16),
+        transparent
+    );
+
+    box-shadow:
+        0 0 18px rgba(0, 190, 255, 0.08);
+
+    opacity: 0.7;
+}
+
+/* Tiny technical scan effect */
+main::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        repeating-linear-gradient(
+            180deg,
+            transparent 0px,
+            transparent 5px,
+            rgba(0, 190, 255, 0.008) 6px
+        );
+
+    opacity: 0.5;
+}
+
+/* Make major panels feel like floating glass in the dark */
+.control-panel,
+.simulation,
+.info-panel,
+#jarvis3DModule {
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.55),
+        inset 0 0 30px rgba(0, 140, 200, 0.018);
+}
+
+/* Keep the 3D viewport dark so the model is the brightest object */
+#jarvis3DCanvas {
+    background:
+        radial-gradient(
+            ellipse at 50% 48%,
+            rgba(0, 120, 180, 0.12) 0%,
+            rgba(3, 12, 24, 0.52) 35%,
+            rgba(1, 4, 10, 0.98) 78%
+        ) !important;
+
+    box-shadow:
+        inset 0 0 90px rgba(0, 150, 220, 0.045),
+        inset 0 -80px 100px rgba(0, 0, 0, 0.35),
+        0 0 35px rgba(0, 150, 220, 0.045);
+}
+
+/* Cyan becomes the main JARVIS accent instead of pink */
+#jarvis3DModule h2,
+#jarvis3DModule h3,
+#jarvis3DParamRail h3,
+.simulation-header span,
+.logo {
+    text-shadow:
+        0 0 8px rgba(0, 210, 255, 0.45),
+        0 0 22px rgba(0, 130, 200, 0.18);
+}
+
+/* Slow cinematic movement */
+@keyframes starkGridDrift {
+    0% {
+        background-position: 0 0, 0 0;
+    }
+
+    50% {
+        background-position: 0 21px, 21px 0;
+    }
+
+    100% {
+        background-position: 42px 42px, 42px 42px;
+    }
+}
+
+/* Avoid the effect becoming too strong on small screens */
+@media (max-width: 750px) {
+    body::before {
+        background-size: 30px 30px;
+        opacity: 0.7;
+    }
+
+    main::before {
+        width: 90vw;
+    }
+}
